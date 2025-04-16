@@ -1,0 +1,35 @@
+# Python cache & virtualenv
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+.Python
+.venv/
+env/
+venv/
+ENV/
+
+# IDE/editor junk
+.vscode/
+
+# FastHTML session key
+.sesskey
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+
+# Databases
+*.db
+*.sqlite
+
+# Environment files
+.env
+.env.*
+
+# OS junk
+Thumbs.db
