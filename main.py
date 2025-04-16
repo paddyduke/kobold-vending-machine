@@ -17,6 +17,9 @@ DEFAULT_ADJECTIVES = load_data("data/adjectives.txt")
 names = DEFAULT_NAMES[:]
 adjectives = DEFAULT_ADJECTIVES[:]
 kobold = ""
+easter_egg_used = False
+easter_egg_slot = None
+dispense_count = 0
 
 
 def layout(*content):
@@ -82,26 +85,40 @@ def index():
 
 @rt("/dispense", methods=["POST"])
 def dispense(req):
-  global names, adjectives, kobold
+  global names, adjectives, kobold, easter_egg_used, easter_egg_slot, dispense_count
 
-  if not names or not adjectives:
-    kobold = "<span style='color: coral;'>Out of kobolds!</span><span style='color: coral;'>Please refill.</span>"
-  else:
+  if not easter_egg_used and dispense_count == easter_egg_slot:
+    kobold = "Kronk the lever puller"
+    easter_egg_used = True
+    if names: names.pop()
+    if adjectives: adjectives.pop()
+    dispense_count += 1
+
+  elif names and adjectives:
     name = random.choice(names)
     adjective = random.choice(adjectives)
     names.remove(name)
     adjectives.remove(adjective)
     kobold = f"{name} the {adjective}"
+    dispense_count += 1
+
+  else:
+    kobold = "<span style='color: coral;'>Out of kobolds!</span><span style='color: coral;'>Please refill.</span>"
 
   return Redirect("/") if not req.headers.get("HX-Request") else kobold
 
 @rt("/refill", methods=["POST"])
 def refill(req):
-  global names, adjectives, kobold
+  global names, adjectives, kobold, easter_egg_slot, easter_egg_used, dispense_count
 
   names = DEFAULT_NAMES[:]
   adjectives = DEFAULT_ADJECTIVES[:]
   kobold = ""
+
+  total_dispenses = min(len(names), len(adjectives))
+  easter_egg_slot = random.randint(0, total_dispenses - 1)
+  easter_egg_used = False
+  dispense_count = 0
 
   return Redirect("/") if not req.headers.get("HX-Request") else kobold
 

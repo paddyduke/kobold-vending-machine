@@ -1,10 +1,8 @@
-absent
 accurate
 afraid
 ambiguous
 ancient
 brawny
-brief
 callous
 capricious
 careless
@@ -12,8 +10,8 @@ cheerful
 cleanly
 clumsy
 competitive
+conspicuously absent
 critical
-cumbersome
 dapper
 decisive
 defiant
@@ -45,6 +43,7 @@ incompetent
 indecisive
 indignant
 jealous
+laconic
 loquacious
 materialistic
 mesy
@@ -58,7 +57,7 @@ panicky
 pedantic
 piquant
 practical
-private
+musical
 reasonable
 reckless
 secretive
@@ -72,18 +71,19 @@ squeamish
 strange
 stubborn
 suspicious
+theatrical
 thoughtful
 tough
 traditional
 trendy
 unambitious
+unbothered
 uninhibited
 unobservant
 unsightly
 untidy
 vacuous
 vast
-violent
 volatile
 voracious
 wary
