@@ -1,4 +1,5 @@
 from fasthtml.common import *
+
 import random
 
 app, rt = fast_app(
@@ -16,6 +17,7 @@ DEFAULT_ADJECTIVES = load_data("data/adjectives.txt")
 names = DEFAULT_NAMES[:]
 adjectives = DEFAULT_ADJECTIVES[:]
 kobold = ""
+
 
 def layout(*content):
   return Html(
@@ -41,22 +43,32 @@ def index():
         Span("1GP"),
         cls="coinplate"
       ),
-      Button(
-        Span("Get a kobold", data_name="Get a kobold"), 
-        cls="button--dispense", 
-        hx_post="/dispense", 
-        hx_target="#dispenser-slot", 
-        hx_swap="innerHTML"
+      Form(
+        Button(
+          Span("Get a kobold", data_name="Get a kobold"), 
+          cls="button--dispense", 
+          type="submit", 
+          hx_post="/dispense", 
+          hx_target="#dispenser-slot", 
+          hx_swap="innerHTML"
+        ),
+        action="/dispense",
+        method="post",
+        style="display: contents;"
       ),
       Div(kobold, cls="dispenser-slot", id="dispenser-slot", aria_live="assertive"),
       cls="machine"
     ),
-    Button(
-      Span("Refill", data_name="Refill"),
-      cls="button--refill", 
-      hx_post="/refill", 
-      hx_target="#dispenser-slot", 
-      hx_swap="innerHTML"
+    Form(
+      Button(
+        Span("Refill", data_name="Refill"),
+        cls="button--refill", 
+        type="submit", 
+        hx_post="/refill", 
+        hx_target="#dispenser-slot", 
+        hx_swap="innerHTML"
+      ),
+      action="/refill", method="post"
     ),
     Footer(
       Div(
@@ -68,8 +80,8 @@ def index():
     )
   )
 
-@rt("/dispense")
-def dispense():
+@rt("/dispense", methods=["POST"])
+def dispense(req):
   global names, adjectives, kobold
 
   if not names or not adjectives:
@@ -81,16 +93,16 @@ def dispense():
     adjectives.remove(adjective)
     kobold = f"{name} the {adjective}"
 
-  return kobold
+  return Redirect("/") if not req.headers.get("HX-Request") else kobold
 
-@rt("/refill")
-def refill():
+@rt("/refill", methods=["POST"])
+def refill(req):
   global names, adjectives, kobold
 
   names = DEFAULT_NAMES[:]
   adjectives = DEFAULT_ADJECTIVES[:]
   kobold = ""
 
-  return kobold
+  return Redirect("/") if not req.headers.get("HX-Request") else kobold
 
 serve()
